@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"os"
 	"strconv"
+	"testing"
 )
 
 // Tuple2Int is a pair of ints
@@ -66,4 +67,11 @@ func Lines(path string, action func(string)) error {
 func StringToInt(number string) int {
 	num, _ := strconv.ParseInt(number, 10, 64)
 	return int(num)
+}
+
+// AssertEquals compares expected with actual and invoques ErrorF if they are not equal (according to ==)
+func AssertEquals(t *testing.T, expected, actual interface{}) {
+	if expected != actual {
+		t.Errorf("Expected:%v. Actual:%v", expected, actual)
+	}
 }

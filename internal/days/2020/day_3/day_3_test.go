@@ -1,6 +1,7 @@
 package days
 
 import (
+	"strings"
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
@@ -96,14 +97,73 @@ func Test_pointAt(t *testing.T) {
 		expected: '#',
 	}, {
 		position: position{2, 0},
-		expected: 'a',
+		expected: 0,
+	}, {
+		position: position{0, 14},
+		expected: '#',
 	}}
 
 	for _, tt := range tests {
 		t.Run("", func(t *testing.T) {
-			if actual := world.pointAt(tt.position); actual != tt.expected {
+			if actual := world.pointAt(tt.position); string(actual) != string(tt.expected) {
 				t.Errorf("Expected:%c, actual:%c", tt.expected, actual)
 			}
 		})
+	}
+}
+
+func Test_countTrees(t *testing.T) {
+	worldDescription := strings.Join([]string{
+		"#.##.......",
+		"#...#...#..",
+		".#....#..#.",
+		"..#.#...#.#",
+		".#...##..#.",
+		"..#.##.....",
+		".#.#.#....#",
+		".#........#",
+		"#.##...#...",
+		"#...##....#",
+		".#..#...#.#",
+	}, "\n")
+
+	world := newWorld(worldDescription)
+
+	slope := slope{3, 1}
+	expected := 8
+	actual := world.countTrees(slope)
+
+	if actual != expected {
+		t.Errorf("Expected %d trees, got %d", expected, actual)
+	}
+}
+
+func Test_day3(t *testing.T) {
+	worldDescription := descriptionFromFile("day_3_input.txt")
+	world := newWorld(worldDescription)
+	slope := slope{3, 1}
+	expected := 244
+	actual := world.countTrees(slope)
+
+	if actual != expected {
+		t.Errorf("Expected %d trees, got %d", expected, actual)
+	}
+}
+
+func Test_day3Multiply(t *testing.T) {
+	worldDescription := descriptionFromFile("day_3_input.txt")
+	world := newWorld(worldDescription)
+	slopes := []slope{slope{1, 1}, slope{3, 1}, slope{5, 1}, slope{7, 1}, slope{1, 2}}
+
+	multiplier := 1
+	for _, slope := range slopes {
+		multiplier = multiplier * world.countTrees(slope)
+	}
+
+	expected := 9406609920
+	actual := multiplier
+
+	if actual != expected {
+		t.Errorf("Expected %d trees, got %d", expected, actual)
 	}
 }

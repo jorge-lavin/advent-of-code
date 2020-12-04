@@ -2,12 +2,19 @@ package days
 
 import (
 	"strings"
+
+	"github.com/lavinj87/advent/internal/lib"
 )
 
 func day3() {}
 
 type world struct {
 	rows []string
+}
+
+func newWorld(description string) *world {
+	rows := strings.Split(description, "\n")
+	return &world{rows: rows}
 }
 
 func (m world) cursor(slope slope) *cursor {
@@ -21,16 +28,32 @@ func (m world) pointAt(position position) byte {
 
 	row := m.rows[position.vertical]
 
-	if position.horizontal >= uint(len(row)) {
-		return 0
-	}
-
-	return byte(row[position.horizontal])
+	return byte(row[position.horizontal%uint(len(row))])
 }
 
-func newWorld(description string) *world {
-	rows := strings.Split(description, "\n")
-	return &world{rows: rows}
+func (m world) countTrees(slope slope) int {
+	counter := 0
+	cursor := m.cursor(slope)
+	pointAt := m.pointAt(cursor.current)
+
+	for pointAt != 0 {
+		if isTree(pointAt) {
+			counter++
+		}
+		cursor.moveNext()
+		pointAt = m.pointAt(cursor.current)
+	}
+	return counter
+}
+
+func descriptionFromFile(inputPath string) string {
+	lines := []string{}
+
+	lib.Lines(inputPath, func(line string) {
+		lines = append(lines, line)
+	})
+
+	return strings.Join(lines, "\n")
 }
 
 type cursor struct {
@@ -50,8 +73,8 @@ type slope struct {
 }
 
 type position struct {
-	horizontal uint
 	vertical   uint
+	horizontal uint
 }
 
 func isTree(point byte) bool {

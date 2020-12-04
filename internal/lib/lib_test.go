@@ -53,3 +53,27 @@ func Test_StringToInt(t *testing.T) {
 		})
 	}
 }
+
+func Test_Tuple2IntMultiply(t *testing.T) {
+	expected := 6
+	actual := Tuple2Int{2, 3}.Multiply()
+	AssertEquals(t, expected, actual)
+}
+
+func Test_Tuple2IntSum(t *testing.T) {
+	expected := 5
+	actual := Tuple2Int{2, 3}.Sum()
+	AssertEquals(t, expected, actual)
+}
+
+func Test_Tuple3IntMultiply(t *testing.T) {
+	expected := 24
+	actual := Tuple3Int{2, 3, 4}.Multiply()
+	AssertEquals(t, expected, actual)
+}
+
+func Test_Tuple3IntSum(t *testing.T) {
+	expected := 9
+	actual := Tuple3Int{2, 3, 4}.Sum()
+	AssertEquals(t, expected, actual)
+}
