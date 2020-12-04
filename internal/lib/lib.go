@@ -75,3 +75,9 @@ func AssertEquals(t *testing.T, expected, actual interface{}) {
 		t.Errorf("Expected:%v. Actual:%v", expected, actual)
 	}
 }
+
+func AssertEqualsWithTest(t *testing.T, expected, actual interface{}, test func(expected, actual interface{}) bool) {
+	if !test(expected, actual) {
+		t.Errorf("Expected:%v. Actual:%v", expected, actual)
+	}
+}
