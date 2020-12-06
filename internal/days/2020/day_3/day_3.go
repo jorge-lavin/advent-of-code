@@ -6,8 +6,6 @@ import (
 	"github.com/lavinj87/advent/internal/lib"
 )
 
-func day3() {}
-
 type world struct {
 	rows []string
 }

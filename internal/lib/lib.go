@@ -76,8 +76,68 @@ func AssertEquals(t *testing.T, expected, actual interface{}) {
 	}
 }
 
-func AssertEqualsWithTest(t *testing.T, expected, actual interface{}, test func(expected, actual interface{}) bool) {
-	if !test(expected, actual) {
-		t.Errorf("Expected:%v. Actual:%v", expected, actual)
+// Filter a given slice of strings and returns a new slice with all the elements that passes the test.
+func Filter(slice []string, test func(element string) bool) []string {
+	if slice == nil {
+		return nil
 	}
+
+	if len(slice) == 0 {
+		return slice
+	}
+
+	filtered := []string{}
+	for _, element := range slice {
+		if test(element) {
+			filtered = append(filtered, element)
+		}
+	}
+	return filtered
+
+}
+
+// Contains returns true if the element is contained in the slice and false otherwise
+func Contains(slice []string, element string) bool {
+	for _, sliceElement := range slice {
+		if sliceElement == element {
+			return true
+		}
+	}
+	return false
+}
+
+// ContainsAll return true if all the elements are contained in the slice and false otherwise
+func ContainsAll(slice []string, elements []string) bool {
+	for _, element := range elements {
+		if !Contains(slice, element) {
+			return false
+		}
+	}
+	return true
+}
+
+// FilterEmpty a given slice of strings and returns a new slice with all the elements that are not empty strings
+func FilterEmpty(slice []string) []string {
+	return Filter(slice, func(element string) bool {
+		return len(element) > 0
+	})
+}
+
+// Partition returns an array of array of strings partitioned by the test function.
+func Partition(lines []string, test func(line string) bool) [][]string {
+	startIndex := 0
+	reduced := [][]string{}
+	for currentIndex, line := range lines {
+		if test(line) {
+			reduced = append(reduced, lines[startIndex:currentIndex+1])
+			startIndex = currentIndex + 1
+		}
+	}
+
+	// append the last part of the array of arrays if needed.
+	if startIndex != len(lines) {
+		reduced = append(reduced, lines[startIndex:len(lines)])
+	}
+
+	return reduced
 }
