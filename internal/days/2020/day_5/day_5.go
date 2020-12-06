@@ -74,19 +74,31 @@ func (m seat) seatID() int {
 	return m.row*8 + m.column
 }
 
-func findMySeat(others []seat) seat {
+func findMySeatID(others []seat) int {
 	maxID := 127*8 + 7
 	minID := 0
 
-	seen := map[int]bool{}
+	// bool means seen
+	allSeats := map[int]bool{}
 
 	for i := minID; i <= maxID; i++ {
-		seen[i] = false
+		allSeats[i] = false
 	}
 
 	for _, seat := range others {
 		currentID := seat.seatID()
-		seen[currentID] = true
+		allSeats[currentID] = true
 	}
-	return seat{}
+
+	// mySeat will be among the unseen
+	for seatID, seen := range allSeats {
+		if !seen {
+			// ooooooooxxxxxxxxxxxxxxxxxxxxxxoxxxxxxxxxxxxxxoooooooooooo
+			if allSeats[seatID-1] == true && allSeats[seatID+1] == true {
+				return seatID
+			}
+		}
+	}
+
+	return -1
 }

@@ -75,16 +75,15 @@ func Test_HighestSeatID(t *testing.T) {
 }
 
 func Test_FindMySeat(t *testing.T) {
-	expected := seat{row: 1, column: 2}
+	expected := 676
 	otherSeats := []seat{}
 	lib.Lines("day_5_input.txt", func(line string) {
 		seat := findSeatForBoardingPass(line)
 		otherSeats = append(otherSeats, seat)
 	})
-	actual := findMySeat(otherSeats)
+	actual := findMySeatID(otherSeats)
 
-	if !cmp.Equal(expected, actual, cmp.AllowUnexported(seat{})) {
+	if actual != expected {
 		t.Errorf("Expected:%v, Actual:%v", expected, actual)
 	}
-
 }
