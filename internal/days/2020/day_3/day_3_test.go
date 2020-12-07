@@ -153,7 +153,7 @@ func Test_day3(t *testing.T) {
 func Test_day3Multiply(t *testing.T) {
 	worldDescription := descriptionFromFile("day_3_input.txt")
 	world := newWorld(worldDescription)
-	slopes := []slope{slope{1, 1}, slope{3, 1}, slope{5, 1}, slope{7, 1}, slope{1, 2}}
+	slopes := []slope{{1, 1}, {3, 1}, {5, 1}, {7, 1}, {1, 2}}
 
 	multiplier := 1
 	for _, slope := range slopes {
